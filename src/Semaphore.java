@@ -1,20 +1,29 @@
-import java.util.List;
+class Semaphore {
 
-public class Semaphore {
-    private int counter;
-    private List<Device> deviceList;
+    protected int counter = 0;
 
-    public Semaphore(){
+    protected Semaphore() {
         counter = 0;
     }
 
-    public Semaphore(int counter){
-        this.counter = counter;
+    protected Semaphore(int initial) {
+        counter = initial;
     }
 
-    public void Wait(){}
-    public void Signal(){ }
-    public void Block(){}
-    public void Wakeup(){}
+    public synchronized void Wait() {
+        counter--;
+        if (counter < 0) {
+            try {
+                System.out.println("Current Counter " + counter);
+                wait();
+            } catch (InterruptedException e) {
+            }
+        }
+    }
 
+    public synchronized void Signal() {
+        counter++;
+        if (counter >= 0) notify();
+    }
 }
+
