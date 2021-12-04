@@ -14,7 +14,6 @@ class Semaphore {
         counter--;
         if (counter < 0) {
             try {
-                System.out.println("Current Counter " + counter);
                 wait();
             } catch (InterruptedException e) {
             }
@@ -26,4 +25,3 @@ class Semaphore {
         if (counter >= 0) notify();
     }
 }
-

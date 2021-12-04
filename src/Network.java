@@ -8,7 +8,7 @@ public class Network {
         int connections_limits = input.nextInt();
         Semaphore semaphore = new Semaphore(connections_limits);
 
-        Router router = new Router();
+        Router router = new Router(semaphore);
 
         int devices;
         System.out.println("What is the number of devices you want to connect? ");
