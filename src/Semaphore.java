@@ -11,17 +11,18 @@ class Semaphore {
     }
 
     public synchronized void Wait() {
-        counter--;
-        if (counter < 0) {
+
+        while (counter < 0) {
             try {
                 wait();
-            } catch (InterruptedException e) {
-            }
+            } catch (InterruptedException e) { }
         }
+        counter--;
     }
 
     public synchronized void Signal() {
-        counter++;
+
         if (counter >= 0) notify();
+        counter++;
     }
 }
