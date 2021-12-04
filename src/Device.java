@@ -13,23 +13,26 @@ public class Device implements Runnable{
         this.type=type;
     }
 
+    public Semaphore getSemaphore() {
+        return semaphore;
+    }
+
     @Override
     public String toString() {
         return "(" +deviceName +") " + "(" + type + ") ";
-
     }
 
     @Override
     public void run() {
         semaphore.Wait();
-        System.out.println( deviceName +" Connected");
+        System.out.println(deviceName +" Connected");
         System.out.println(deviceName + " Performing Online Activity");
 
         try {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
         }
-        System.out.println(this.toString()+" Logged Out");
+        System.out.println(toString()+" Logged Out");
         semaphore.Signal();
     }
 }

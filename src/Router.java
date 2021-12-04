@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Router {
     private List<Device> connections;
-    Semaphore semaphore;
+    private Semaphore semaphore;
 
 
     public Router(Semaphore semaphore) {
@@ -15,8 +15,6 @@ public class Router {
         int counter = semaphore.counter;
         while (connections.size()!=0) {
             Device d = connections.get(0);
-            Thread thread = new Thread(d);
-
             if (counter > 0) {
                 System.out.println(d.toString() + " Arrived");
                 counter--;
@@ -25,10 +23,9 @@ public class Router {
                 counter--;
             }
 
-            thread.start();
+            connect(d);
 
-            releaseConnection();
-
+            connections.remove(0);
         }
     }
 
@@ -36,10 +33,8 @@ public class Router {
         this.connections.add(device);
     }
 
-    public void releaseConnection() {
-        if(connections.size()!=0) {
-            connections.remove(0);
-        }
+    public void connect(Device d){
+        Thread thread = new Thread(d);
+        thread.start();
     }
-
 }
