@@ -1,22 +1,24 @@
 import javax.swing.*;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
-public class Device implements Runnable{
+public class Device implements Runnable {
 
     private String deviceName;
     private String type;
     private Semaphore semaphore;
 
-    public Device(Semaphore semaphore, String deviceName, String type){
-        this.semaphore=semaphore;
+    public Device(Semaphore semaphore, String deviceName, String type) {
+        this.semaphore = semaphore;
         this.deviceName = deviceName;
-        this.type=type;
+        this.type = type;
     }
 
     public Device(Device device) {
-        deviceName = device.deviceName;;
+        deviceName = device.deviceName;
+        ;
         type = device.type;
         semaphore = device.semaphore;
     }
@@ -27,7 +29,7 @@ public class Device implements Runnable{
 
     @Override
     public String toString() {
-        return "(" +deviceName +") " + "(" + type + ") ";
+        return "(" + deviceName + ") " + "(" + type + ") ";
     }
 
 
@@ -35,9 +37,21 @@ public class Device implements Runnable{
         return deviceName.equals(obj.deviceName) && type.equals(obj.type);
     }
 
+    public void Connect() {
+        System.out.println(this.deviceName + " Connected");
+    }
+
+    public void PerformActivity() {
+        System.out.println(this.deviceName + " Performing Online Activity");
+    }
+
+    public void Logout() {
+        System.out.println(this.toString() + " Logged Out");
+    }
+
     @Override
     public void run() {
-        semaphore.Wait();
+       // semaphore.Wait();
 
         /*for (int i = 0; i < InterfaceCreator.deviceQueue.size(); i++){
             Device d = new Device(InterfaceCreator.deviceQueue.get(i));
@@ -58,18 +72,15 @@ public class Device implements Runnable{
                 break;
             }
         }*/
-
-
-        System.out.println(deviceName +" Connected");
-        System.out.println(deviceName + " Performing Online Activity");
-
+        Connect();
+        PerformActivity();
         try {
             Random random = new Random();
             int r_num = random.nextInt(4);
             TimeUnit.SECONDS.sleep(r_num);
-        } catch (InterruptedException e) { }
-        System.out.println(toString()+" Logged Out");
-
+        } catch (InterruptedException e) {
+        }
+        Logout();
         semaphore.Signal();
 
         /*DefaultListModel <Device> connectedModel = new DefaultListModel<>();

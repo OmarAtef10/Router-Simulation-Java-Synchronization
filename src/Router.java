@@ -12,8 +12,8 @@ public class Router {
     }
 
     public void connectToRouter() {
-        int counter = semaphore.counter;
-        while (connections.size()!=0) {
+        int counter = semaphore.getCounter();
+        while (connections.size() != 0) {
             Device d = connections.get(0);
             if (counter > 0) {
                 System.out.println(d.toString() + " Arrived");
@@ -25,7 +25,7 @@ public class Router {
 
             connect(d);
 
-            connections.remove(0);
+
         }
     }
 
@@ -33,11 +33,19 @@ public class Router {
         this.connections.add(device);
     }
 
-    public void setConnectionsList(List<Device> devices){
+    public void setConnectionsList(List<Device> devices) {
         this.connections = devices;
     }
-    public void connect(Device d){
+
+    public void connect(Device d) {
         Thread thread = new Thread(d);
+        semaphore.Wait();
         thread.start();
+
+        releaseConnection();
+    }
+
+    public void releaseConnection() {
+        connections.remove(0);
     }
 }
