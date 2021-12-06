@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.util.Random;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
@@ -38,7 +39,7 @@ public class Device implements Runnable{
     public void run() {
         semaphore.Wait();
 
-        for (int i = 0; i < InterfaceCreator.deviceQueue.size(); i++){
+        /*for (int i = 0; i < InterfaceCreator.deviceQueue.size(); i++){
             Device d = new Device(InterfaceCreator.deviceQueue.get(i));
             if (equals(d)){
                 InterfaceCreator.deviceQueue.remove(i);
@@ -56,27 +57,28 @@ public class Device implements Runnable{
                 InterfaceCreator.currentlyConnectedJList.setModel(connectedModel);
                 break;
             }
-        }
+        }*/
 
 
         System.out.println(deviceName +" Connected");
         System.out.println(deviceName + " Performing Online Activity");
 
         try {
-            TimeUnit.SECONDS.sleep(4);
-        } catch (InterruptedException e) {
-        }
+            Random random = new Random();
+            int r_num = random.nextInt(4);
+            TimeUnit.SECONDS.sleep(r_num);
+        } catch (InterruptedException e) { }
         System.out.println(toString()+" Logged Out");
 
         semaphore.Signal();
 
-        DefaultListModel <Device> connectedModel = new DefaultListModel<>();
+        /*DefaultListModel <Device> connectedModel = new DefaultListModel<>();
         for (int j = 0; j < InterfaceCreator.currentlyConnectedJList.getModel().getSize(); j++){
             if (!equals((Device) InterfaceCreator.currentlyConnectedJList.getModel().getElementAt(j))){
                 connectedModel.addElement((Device) InterfaceCreator.currentlyConnectedJList.getModel().getElementAt(j));
             }
             InterfaceCreator.currentlyConnectedJList.setModel(connectedModel);
-        }
+        }*/
 
     }
 }
