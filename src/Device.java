@@ -43,6 +43,12 @@ public class Device implements Runnable {
 
     public void PerformActivity() {
         System.out.println(this.deviceName + " Performing Online Activity");
+        try {
+            Random random = new Random();
+            int r_num = random.nextInt(4);
+            TimeUnit.SECONDS.sleep(r_num);
+        } catch (InterruptedException e) {
+        }
     }
 
     public void Logout() {
@@ -51,7 +57,7 @@ public class Device implements Runnable {
 
     @Override
     public void run() {
-       // semaphore.Wait();
+        // semaphore.Wait();
 
         /*for (int i = 0; i < InterfaceCreator.deviceQueue.size(); i++){
             Device d = new Device(InterfaceCreator.deviceQueue.get(i));
@@ -74,12 +80,7 @@ public class Device implements Runnable {
         }*/
         Connect();
         PerformActivity();
-        try {
-            Random random = new Random();
-            int r_num = random.nextInt(4);
-            TimeUnit.SECONDS.sleep(r_num);
-        } catch (InterruptedException e) {
-        }
+
         Logout();
         semaphore.Signal();
 
