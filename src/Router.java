@@ -33,6 +33,9 @@ public class Router {
         this.connections.add(device);
     }
 
+    public void setConnectionsList(List<Device> devices){
+        this.connections = devices;
+    }
     public void connect(Device d){
         Thread thread = new Thread(d);
         thread.start();

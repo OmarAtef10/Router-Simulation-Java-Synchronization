@@ -19,4 +19,8 @@ class Semaphore {
         counter++;
         if (counter > 0) notifyAll();
     }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
 }

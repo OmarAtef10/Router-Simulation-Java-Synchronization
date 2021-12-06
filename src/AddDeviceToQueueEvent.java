@@ -3,11 +3,13 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class AddDeviceToQueueListener implements MouseListener {
+public class AddDeviceToQueueEvent implements MouseListener {
     Font font;
+    JFrame parent;
 
-    public AddDeviceToQueueListener(Font f){
+    public AddDeviceToQueueEvent(Font f, JFrame p){
         this.font = f;
+        this.parent = p;
     }
 
     @Override
@@ -55,7 +57,7 @@ public class AddDeviceToQueueListener implements MouseListener {
         JPanel last = new JPanel();
 
         JButton addDeviceButton = new JButton("Add Device");
-        addDeviceButton.addMouseListener(new CreateDeviceListener(deviceNameInput, deviceTypeInput));
+        addDeviceButton.addMouseListener(new CreateDeviceEvent(deviceNameInput, deviceTypeInput, inputWindow));
 
         last.add(addDeviceButton);
         inputWindow.add(last);
