@@ -1,6 +1,6 @@
 class Semaphore {
 
-    protected int counter = 0;
+    protected static volatile int counter = 0;
 
     public Semaphore(int initial) {
         counter = initial;
@@ -20,11 +20,7 @@ class Semaphore {
         if (counter > 0) notifyAll();
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
-    }
-
-    public  int getCounter(){
+    public static int getCounter(){
         return counter;
     }
 

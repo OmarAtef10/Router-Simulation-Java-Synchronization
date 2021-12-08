@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Timer;
@@ -8,23 +9,16 @@ public class Device implements Runnable {
 
     private String deviceName;
     private String type;
-    private Semaphore semaphore;
+    private Router router;
 
-    public Device(Semaphore semaphore, String deviceName, String type) {
-        this.semaphore = semaphore;
+    public Device(String deviceName, String type) {
         this.deviceName = deviceName;
         this.type = type;
+        this.router = null;
     }
 
-    public Device(Device device) {
-        deviceName = device.deviceName;
-        ;
-        type = device.type;
-        semaphore = device.semaphore;
-    }
-
-    public Semaphore getSemaphore() {
-        return semaphore;
+    public void setRouter(Router router){
+        this.router = router;
     }
 
     @Override
@@ -37,8 +31,9 @@ public class Device implements Runnable {
         return deviceName.equals(obj.deviceName) && type.equals(obj.type);
     }
 
-    public void Connect() {
+    public void Connect() throws IOException {
         System.out.println(this.deviceName + " Connected");
+        router.writeLogs(this.deviceName+" Connected\n");
     }
 
     public void PerformActivity() {
@@ -47,50 +42,28 @@ public class Device implements Runnable {
             Random random = new Random();
             int r_num = random.nextInt(4);
             TimeUnit.SECONDS.sleep(r_num);
-        } catch (InterruptedException e) {
-        }
+        } catch (InterruptedException e) { }
     }
 
-    public void Logout() {
+    public void Logout() throws IOException {
+        router.getSemaphore().Signal();
         System.out.println(this.toString() + " Logged Out");
+        router.writeLogs(this.toString()+" Logged out!\n");
     }
 
     @Override
     public void run() {
-        // semaphore.Wait();
-
-        /*for (int i = 0; i < InterfaceCreator.deviceQueue.size(); i++){
-            Device d = new Device(InterfaceCreator.deviceQueue.get(i));
-            if (equals(d)){
-                InterfaceCreator.deviceQueue.remove(i);
-                DefaultListModel<Device> model = new DefaultListModel<>();
-                for (Device device : InterfaceCreator.deviceQueue){
-                    model.addElement(device);
-                }
-                InterfaceCreator.deviceQueueJList.setModel(model);
-
-                DefaultListModel <Device> connectedModel = new DefaultListModel<>();
-                for (int j = 0; j < InterfaceCreator.currentlyConnectedJList.getModel().getSize(); j++){
-                    connectedModel.addElement((Device) InterfaceCreator.currentlyConnectedJList.getModel().getElementAt(i));
-                }
-                connectedModel.addElement(d);
-                InterfaceCreator.currentlyConnectedJList.setModel(connectedModel);
-                break;
-            }
-        }*/
-        Connect();
+        try {
+            Connect();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
         PerformActivity();
-
-        Logout();
-        semaphore.Signal();
-
-        /*DefaultListModel <Device> connectedModel = new DefaultListModel<>();
-        for (int j = 0; j < InterfaceCreator.currentlyConnectedJList.getModel().getSize(); j++){
-            if (!equals((Device) InterfaceCreator.currentlyConnectedJList.getModel().getElementAt(j))){
-                connectedModel.addElement((Device) InterfaceCreator.currentlyConnectedJList.getModel().getElementAt(j));
-            }
-            InterfaceCreator.currentlyConnectedJList.setModel(connectedModel);
-        }*/
-
+        try {
+            Logout();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
     }
+
 }

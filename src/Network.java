@@ -1,7 +1,8 @@
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Network {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Scanner input = new Scanner(System.in);
 
         System.out.println("What is the Maximum number of connections? ");
@@ -15,7 +16,7 @@ public class Network {
         devices=input.nextInt();
         for (int i = 0; i < devices; i++){
             System.out.println("Enter name and type ");
-            Device d = new Device(semaphore,input.next(),input.next());
+            Device d = new Device(input.next(),input.next());
             router.setConnectionsList(d);
 
         }
